@@ -4,34 +4,47 @@
 const path = require('path');
 const webpack = require('webpack');
 const webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
-var argv = require('minimist')(process.argv.slice(2));
+const argv = require('minimist')(process.argv.slice(2));
 const isWeb = (argv && argv.target === 'web');
-const output = (isWeb ? 'build/web' : 'build/electron');
+const publicPath = (isWeb ? 'http://localhost:8080/build/' : path.join(__dirname, 'src'));
 
 let options ={
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['babel-loader'],
-      exclude: /node_modules/,
-    }]
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: ['es2015']
+          }
+        }],
+      }
+    ]
   },
   output: {
-    path: path.join(__dirname, output),
-    publicPath: path.join(__dirname, 'src'),
-    filename: 'bundle.js',
+    path: __dirname + '/build',
+    publicPath: publicPath,
+    filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
+    extensions: ['.js', '.jsx', '.json'],
+    modules: [
+      __dirname + '/build',
+      'node_modules'
+    ],
   },
   entry: [
     './src/index',
   ],
-  debug: true,
-
+  node: {
+    fs: 'empty'
+  }
 };
 
 options.target = webpackTargetElectronRenderer(options);
-
 module.exports = options;
+
+
+
