@@ -25,7 +25,7 @@ let options = {
           // plugins: [require('@babel/plugin-proposal-object-rest-spread')]
         }
       },
-      exclude: [ /node_modules/, isWeb ? /^(.*\.(?!(electron.js)$))?[^.]*$/i : /^(.*\.(?!(web.js)$))?[^.]*$/i ],
+      exclude: [ /node_modules/ ],
     }]
   },
   devServer: {

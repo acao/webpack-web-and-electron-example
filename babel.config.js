@@ -5,13 +5,13 @@ const webTargets = {
     safari: "11.1"
 };
 const electronTargets = {
-    electron: "2"
+    electron: "2",
 }
 
 
 const presets = [
     ["@babel/env", {
-      targets: process.env.APP_TARGET === 'WEB' ? webTargets : 'electron',
+      targets: process.env.APP_TARGET === 'WEB' ? webTargets : electronTargets,
       useBuiltIns: "usage"
     }]
   ];
