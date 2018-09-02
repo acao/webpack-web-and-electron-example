@@ -1,6 +1,6 @@
 ## Summary
 
-This repository was originally created for this medium article about developing a simple webpack based app for both web and electron. This is not meant to be a starter/boilerplate of any kind, just a proof of concept! 
+This repository was originally created for [this medium article](https://medium.com/@ad_harmonium/build-to-both-electron-js-and-browser-targets-using-webpack-59266bdb76a) about developing a simple webpack based app for both web and electron. This is not meant to be a starter/boilerplate of any kind, just a proof of concept! 
 
 `webpack-electron` is a great starting point for anyone looking to use webpack and electron together.
 
