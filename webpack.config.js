@@ -3,35 +3,46 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
-var argv = require('minimist')(process.argv.slice(2));
-const isWeb = (argv && argv.target === 'web');
-const output = (isWeb ? 'build/web' : 'build/electron');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-let options ={
+const [,,command, value] = process.argv;
+const srcPath = path.join(__dirname, 'src');
+const isWeb = (process.env.APP_TARGET &&  process.env.APP_TARGET === 'WEB');
+const outputPath = path.join(__dirname, 'build', isWeb ? 'web' : 'electron');
+const indexPath = path.join(outputPath, isWeb ? 'index.html' : 'index-electron.html');
+
+console.log({ outputPath, indexPath, isWeb })
+
+let options = {
+  mode: process.env.NODE_ENV,
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
-      loaders: ['babel-loader'],
-      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+          // plugins: [require('@babel/plugin-proposal-object-rest-spread')]
+        }
+      },
+      exclude: [ /node_modules/ ],
     }]
   },
+  devServer: {
+    contentBase: outputPath,
+  },
   output: {
-    path: path.join(__dirname, output),
-    publicPath: path.join(__dirname, 'src'),
+    path: outputPath,
     filename: 'bundle.js',
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx'],
-    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
-  },
-  entry: [
-    './src/index',
-  ],
-  debug: true,
-
+  entry: './src/index',
+  plugins: [new HtmlWebpackPlugin({ 
+    title: `My ${isWeb ? 'Web' : 'Electron'} App`,
+    template: path.join(srcPath, 'index.html'),
+    filename: indexPath,
+  })]
 };
 
-options.target = webpackTargetElectronRenderer(options);
+options.target = isWeb ? 'web' : 'electron-renderer' 
 
 module.exports = options;

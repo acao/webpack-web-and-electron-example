@@ -2,28 +2,34 @@
   "name": "electron-webpack-multi-target-example",
   "version": "0.0.1",
   "description": "A simple example using webpack and to build an application to both electron and web targets",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "webpack-dev-server": "PORT=8081 NODE_ENV=development webpack-dev-server",
+    "web": "APP_TARGET=WEB webpack",
+    "web:dev": "NODE_ENV=development APP_TARGET=WEB webpack-dev-server",
+    "electron": "webpack && electron .",
+    "electron:dev": "NODE_ENV=development npm-run-all --parallel webpack-dev-server \"electron\"",
+    "all:dev": "npm-run-all --parallel electron:dev web:dev"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-core": "^6.3.26",
-    "babel-loader": "^6.2.0",
-    "electron-prebuilt": "^0.36.2",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
-    "webpack": "^1.12.9",
-    "webpack-dev-server": "^1.14.0",
-    "webpack-target-electron-renderer": "^0.3.0"
+    "html-webpack-plugin": "^3.2.0",
+    "npm-run-all": "^4.1.3",
+    "webpack": "^4.17.1",
+    "webpack-dev-server": "^3.1.6",
+    "webpack-cli": "^3.1.0"
   },
   "dependencies": {
-    "is-electron-renderer": "^2.0.0",
-    "minimist": "^1.2.0"
-  },
-  "scripts": {
-    "electron": "webpack && electron .",
-    "web": "webpack --target web && webpack-dev-server  --target web "
+    "@babel/polyfill": "^7.0.0",
+    "electron": "^2.0.8",
+    "is-electron-renderer": "^2.0.0"
   }
 }
